@@ -48,6 +48,7 @@ const LandingFormSchema: ZodType = z
     paxNumber: z.coerce
       .number()
       .gte(0, 'Il valore minimo ammesso è zero')
+      .lte(5, 'Il valore massimo ammesso è 50')
       .optional(),
     departure: requiredString,
     destination: requiredString,
@@ -233,8 +234,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="0"
               {...register('paxNumber')}
-              min={0}
-              max={50}
             />
             {errors?.paxNumber && (
               <p className="pt-2.5 text-red-500">{errors.paxNumber.message}</p>

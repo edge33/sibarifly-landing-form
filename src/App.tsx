@@ -17,12 +17,18 @@ function App() {
     setViewSummary(false);
   };
 
+  const onResetButtonClicked = () => {
+    setLandingData(undefined);
+    setViewSummary(false);
+  };
+
   return (
     <Layout>
       {landingData && viewSummary ? (
         <Summary
           landingData={landingData}
           onEditButtonClicked={onEditButtonClicked}
+          onResetButtonClicked={onResetButtonClicked}
         />
       ) : (
         <LandingForm

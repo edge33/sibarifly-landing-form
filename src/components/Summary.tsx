@@ -3,6 +3,7 @@ import { LandingFormData } from '../types';
 type SummaryProps = {
   landingData: LandingFormData;
   onEditButtonClicked: () => void;
+  onResetButtonClicked: () => void;
 };
 
 const Summary = ({
@@ -19,6 +20,7 @@ const Summary = ({
     firstOfficer,
   },
   onEditButtonClicked,
+  onResetButtonClicked,
 }: SummaryProps) => {
   return (
     <>
@@ -124,20 +126,27 @@ const Summary = ({
         </div>
       </div>
 
-      <div className="print:hidden flex flex-col md:flex-row gap-6">
+      <div className="print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
         <button
           onClick={() => window.print()}
           type="submit"
-          className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+          className="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
         >
           Stampa report
         </button>
         <button
           onClick={onEditButtonClicked}
           type="button"
-          className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          className="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
           Modifica
+        </button>
+        <button
+          onClick={onResetButtonClicked}
+          type="button"
+          className="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >
+          Nuovo report
         </button>
       </div>
     </>
