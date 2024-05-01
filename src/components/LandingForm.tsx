@@ -48,7 +48,7 @@ const LandingFormSchema: ZodType = z
     paxNumber: z.coerce
       .number()
       .gte(0, 'Il valore minimo ammesso è zero')
-      .lte(5, 'Il valore massimo ammesso è 50')
+      .lte(50, 'Il valore massimo ammesso è 50')
       .optional(),
     departure: requiredString,
     destination: requiredString,
