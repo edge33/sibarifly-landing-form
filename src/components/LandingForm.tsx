@@ -9,9 +9,6 @@ const requiredString = z
   .trim()
   .min(1, { message: 'Questo campo è obbligatorio' });
 
-const timeValidator = z.coerce.string({
-  required_error: 'Il campo è obbligatorio',
-});
 // .refine(
 //   time_ => {
 //     const currentDate_ = new Date();
@@ -52,8 +49,8 @@ const LandingFormSchema: ZodType = z
       .optional(),
     departure: requiredString,
     destination: requiredString,
-    arrivalTime: timeValidator,
-    departureTime: timeValidator,
+    arrivalTime: requiredString,
+    departureTime: requiredString,
   })
   .superRefine(({ arrivalTime, departureTime }, ctx) => {
     if (
