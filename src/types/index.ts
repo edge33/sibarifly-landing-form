@@ -1,5 +1,5 @@
 export type LandingFormData = {
-  date: Date;
+  date: string;
   registration: string;
   model: string;
   pilotInCommand: string;

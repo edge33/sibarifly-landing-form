@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import instance from '../axios/axiosInstance';
 import { LandingFormData } from '../types';
 
 type SummaryProps = {
@@ -7,7 +9,11 @@ type SummaryProps = {
 };
 
 const Summary = ({
-  landingData: {
+  landingData,
+  onEditButtonClicked,
+  onResetButtonClicked,
+}: SummaryProps) => {
+  const {
     arrivalTime,
     date,
     departure,
@@ -18,10 +24,23 @@ const Summary = ({
     pilotInCommand,
     registration,
     firstOfficer,
-  },
-  onEditButtonClicked,
-  onResetButtonClicked,
-}: SummaryProps) => {
+  } = landingData;
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+
+  const postLandingData = async () => {
+    try {
+      const result = await instance.post('/events', landingData);
+      if (result.status === 201) {
+        setSaveSuccess(true);
+      }
+    } catch (error) {
+      console.error(error);
+      setSaveSuccess(false);
+      setSaveError(true);
+    }
+  };
+
   return (
     <>
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
@@ -34,7 +53,12 @@ const Summary = ({
               Data di arrivo
             </dt>
             <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
-              {date.toLocaleString()}
+              {new Date(date)
+                .toISOString()
+                .split('T')[0]
+                .split('-')
+                .reverse()
+                .join('/')}
             </dd>
           </dl>
           <dl>
@@ -126,25 +150,42 @@ const Summary = ({
         </div>
       </div>
 
-      <div className="print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
-        <button
-          onClick={() => window.print()}
-          type="submit"
-          className="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-        >
-          Stampa report
-        </button>
+      {saveError && !saveSuccess && (
+        <div className="mt-6 print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
+          <p className="text-red-500">Errore salvataggio report</p>
+        </div>
+      )}
+
+      <div className="mt-6 print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
+        {!saveSuccess && (
+          <button
+            onClick={postLandingData}
+            type="submit"
+            className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+          >
+            Salva report
+          </button>
+        )}
+        {saveSuccess && (
+          <button
+            onClick={() => window.print()}
+            type="submit"
+            className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+          >
+            Stampa report
+          </button>
+        )}
         <button
           onClick={onEditButtonClicked}
           type="button"
-          className="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
           Modifica
         </button>
         <button
           onClick={onResetButtonClicked}
           type="button"
-          className="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
           Nuovo report
         </button>
