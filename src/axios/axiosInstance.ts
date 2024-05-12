@@ -15,7 +15,7 @@ const wait = (time: number) =>
 
 const axiosConfig = {
   baseURL: config.API_URL,
-  timeout: 1000,
+  timeout: 10000,
   _index: 0,
 };
 
