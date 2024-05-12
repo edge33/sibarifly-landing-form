@@ -8,7 +8,10 @@ html,
   height: 100%;
 }
 
-input[type='time'],
+input[type='time']::-webkit-calendar-picker-indicator {
+  background: none;
+}
+
 input[type='date']::-webkit-calendar-picker-indicator {
   background: none;
 }
