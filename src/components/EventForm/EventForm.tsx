@@ -16,18 +16,6 @@ const getCurrentDateTime = () => {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-const getTime = (offset = 0) => {
-  const date = new Date(new Date().getTime() + offset * 60000);
-
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-
-  return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
-};
-
-const time = getTime();
-const timePlusTen = getTime(10);
-
 type LandingFormProps = {
   onLandingDataFiled: (data: EventFormData) => void;
   initialData?: EventFormData;
