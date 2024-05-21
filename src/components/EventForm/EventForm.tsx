@@ -1,94 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { ZodType, z } from 'zod';
 // import LandingDatepicker from './LandingDatePicker';
-import type { LandingFormData } from '../types';
+import { GA, ARRIVAL, type EventFormData, DEPARTURE } from '../../types';
+import { EventFormSchema } from './EventFormSchema';
 
-const requiredString = z
-  .string()
-  .trim()
-  .min(1, { message: 'Questo campo è obbligatorio' });
+const getCurrentDateTime = () => {
+  const now = new Date();
 
-// .refine(
-//   time_ => {
-//     const currentDate_ = new Date();
-//     const currentTime = `${currentDate_.getHours()}:${currentDate_.getMinutes()}`;
-//     return (
-//       new Date(`1970/01/01 ${time_}`) <= new Date(`1970/01/01 ${currentTime}`)
-//     );
-//   },
-//   {
-//     message: "L'ora di arrivo non può essere posteriore all'ora attuale",
-//   },
-// );
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
 
-const LandingFormSchema: ZodType = z
-  .object({
-    date: z.coerce.string({ required_error: 'Il campo è obbligatorio' }).refine(
-      data_ => {
-        return new Date(data_) <= new Date();
-      },
-      {
-        message: 'Puoi registrare solo atterraggi avvenuti fino ad oggi',
-      },
-    ),
-    // .transform(val => {
-    // console.log('date ', val);
-
-    // const date = new Date(val);
-    // return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-    // })
-    registration: requiredString,
-    model: requiredString,
-    pilotInCommand: requiredString,
-    firstOfficer: z.string().optional(),
-    paxNumber: z.coerce
-      .number()
-      .gte(0, 'Il valore minimo ammesso è zero')
-      .lte(50, 'Il valore massimo ammesso è 50')
-      .optional(),
-    departure: requiredString,
-    destination: requiredString,
-    arrivalTime: requiredString,
-    departureTime: requiredString,
-  })
-  .superRefine(({ arrivalTime, departureTime }, ctx) => {
-    if (
-      new Date(`1970/01/01 ${arrivalTime}`) >
-      new Date(`1970/01/01 ${departureTime}`)
-    ) {
-      ctx.addIssue({
-        path: ['arrivalTime'],
-        code: z.ZodIssueCode.custom,
-        message:
-          'La data di partenza deve essere posteriore alla data di arrivo',
-      });
-
-      ctx.addIssue({
-        path: ['departureTime'],
-        code: z.ZodIssueCode.custom,
-        fatal: true,
-        message:
-          'La data di partenza deve essere posteriore alla data di arrivo',
-      });
-    }
-  });
-
-const getTime = (offset = 0) => {
-  const date = new Date(new Date().getTime() + offset * 60000);
-
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-
-  return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-const time = getTime();
-const timePlusTen = getTime(10);
-
 type LandingFormProps = {
-  onLandingDataFiled: (data: LandingFormData) => void;
-  initialData?: LandingFormData;
+  onLandingDataFiled: (data: EventFormData) => void;
+  initialData?: EventFormData;
 };
 
 const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
@@ -98,40 +28,91 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
     formState: { errors },
     setValue,
     getValues,
-  } = useForm<LandingFormData>({
+  } = useForm<EventFormData>({
     defaultValues: initialData
       ? initialData
       : {
-          date: new Date().toISOString().split('T')[0],
-          arrivalTime: time,
-          departureTime: timePlusTen,
+          dateTime: getCurrentDateTime(),
+          aircraftType: GA,
+          eventType: ARRIVAL,
         },
     mode: 'onChange',
-    resolver: zodResolver(LandingFormSchema),
+    resolver: zodResolver(EventFormSchema),
   });
+
+  const eventType = getValues().eventType;
+
+  const onSubmit = (data: EventFormData) => {
+    const destination = data.destination;
+    if (data.eventType === ARRIVAL) {
+      data.destination = 'Sibari';
+      data.departure = destination;
+    } else if (data.eventType === DEPARTURE) {
+      data.departure = 'Sibari';
+    }
+
+    onLandingDataFiled(data);
+  };
 
   return (
     <>
       <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-        Registra atterraggio/decollo
+        Registra evento
       </h2>
-      <form onSubmit={handleSubmit(onLandingDataFiled)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
           <div className="sm:col-span-2">
+            <p className="block text-sm font-medium text-gray-900 dark:text-white">
+              Evento *
+            </p>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              id="landing-radio"
+              type="radio"
+              value="ARRIVAL"
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              {...register('eventType')}
+              onClick={() => {
+                setValue('eventType', 'ARRIVAL', { shouldValidate: true });
+              }}
+            />
             <label
-              htmlFor="date"
+              htmlFor="landing-radio"
+              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Atterraggio
+            </label>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              id="departure-radio"
+              type="radio"
+              value="DEPARTURE"
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              {...register('eventType')}
+              onClick={() => {
+                setValue('eventType', 'DEPARTURE', { shouldValidate: true });
+              }}
+            />
+            <label
+              htmlFor="departure-radio"
+              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Partenza
+            </label>
+          </div>
+
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="dateTime"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Data atterraggio
+              Data atterraggio *
             </label>
 
-            {/* <LandingDatepicker
-              onSelectedDateChanged={data =>
-                setValue('date', data, {
-                  shouldValidate: true,
-                })
-              }
-            /> */}
             <div className="relative">
               <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
                 <svg
@@ -145,56 +126,104 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 </svg>
               </div>
               <input
-                max={new Date().toISOString().split('T')[0]}
-                type="date"
+                max={getCurrentDateTime()}
+                type="datetime-local"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register('date')}
+                {...register('dateTime')}
               />
             </div>
 
-            {errors?.date && (
-              <p className="text-red-500">{errors.date.message}</p>
+            {errors?.dateTime && (
+              <p className="text-red-500">{errors.dateTime.message}</p>
             )}
           </div>
 
-          <div className="w-full">
-            <label
-              htmlFor="registration"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Registration
-            </label>
+          <div className="sm:col-span-2">
+            <p className="block text-sm font-medium text-gray-900 dark:text-white">
+              Tipo di velivolo *
+            </p>
+          </div>
+
+          <div className="flex items-center">
             <input
-              type="text"
-              id="registration"
-              className={`${errors.registration && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-              placeholder="I-6897"
-              {...register('registration')}
+              id="ga-radio"
+              type="radio"
+              value="GA"
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              {...register('aircraftType')}
             />
-            {errors?.registration && (
+            <label
+              htmlFor="ga-radio"
+              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              GA
+            </label>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              id="ulv-radio"
+              type="radio"
+              value="ULV"
+              {...register('aircraftType')}
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              htmlFor="ulv-radio"
+              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              ULV
+            </label>
+          </div>
+
+          <div className="sm:col-span-2">
+            {errors?.aircraftType && (
               <p className="pt-2.5 text-red-500">
-                {errors.registration.message}
+                {errors.aircraftType.message}
               </p>
             )}
           </div>
 
           <div className="w-full">
             <label
-              htmlFor="plane"
+              htmlFor="aircraftRegistration"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Aereo
+              Registrazione *
             </label>
             <input
               type="text"
-              id="plane"
-              className={`${errors.model && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              id="aircraftRegistration"
+              className={`${errors.aircraftRegistration && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              placeholder="I-6897"
+              {...register('aircraftRegistration')}
+            />
+            {errors?.aircraftRegistration && (
+              <p className="pt-2.5 text-red-500">
+                {errors.aircraftRegistration.message}
+              </p>
+            )}
+          </div>
+
+          <div className="w-full">
+            <label
+              htmlFor="aircraftModel"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Aereo *
+            </label>
+            <input
+              type="text"
+              id="aircraftModel"
+              className={`${errors.aircraftModel && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
               placeholder="C-172"
-              {...register('model')}
+              {...register('aircraftModel')}
               min={0}
             />
-            {errors?.model && (
-              <p className="pt-2.5 text-red-500">{errors.model.message}</p>
+            {errors?.aircraftModel && (
+              <p className="pt-2.5 text-red-500">
+                {errors.aircraftModel.message}
+              </p>
             )}
           </div>
 
@@ -203,7 +232,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="pic"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Pilota responsabile
+              Pilota responsabile *
             </label>
             <input
               type="text"
@@ -243,7 +272,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="pax"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Passeggeri
+              Passeggeri *
             </label>
             <input
               type="number"
@@ -259,32 +288,76 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
 
           <div className="w-full" />
 
-          <div className="w-full sm:col-span-2">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-              Provenienza
-            </h2>
-          </div>
-
-          <div className="w-full">
+          <div className="col-span-2">
             <label
-              htmlFor="departure"
+              htmlFor="destination"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Da
+              {eventType === ARRIVAL ? 'Provenienza' : 'Destinazione'}
             </label>
             <input
               type="text"
-              id="departure"
-              className={`${errors.departure && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-              placeholder=""
-              {...register('departure')}
+              id="destination"
+              className={`${errors.destination && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              {...register('destination')}
             />
-            {errors?.departure && (
-              <p className="pt-2.5 text-red-500">{errors.departure.message}</p>
+            {errors?.destination && (
+              <p className="pt-2.5 text-red-500">
+                {errors.destination.message}
+              </p>
+            )}
+          </div>
+
+          <div className="w-full sm:col-span-2">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              Dettagli di contatto
+            </h2>
+            <p className="text-sm text-gray-900 dark:text-white">
+              Aggiungi i tuoi contatti per rimanere informato sulle iniziative
+              di SibariFly
+            </p>
+          </div>
+          <div className="w-full">
+            <label
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Indirizzo email
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              {...register('emailAddress')}
+            />
+            {errors?.emailAddress && (
+              <p className="pt-2.5 text-red-500">
+                {errors.emailAddress.message}
+              </p>
             )}
           </div>
 
           <div className="w-full">
+            <label
+              htmlFor="mobilePhone"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Numero di telefono
+            </label>
+            <input
+              type="tel"
+              id="mobilePhone"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              {...register('mobilePhone')}
+            />
+            {errors?.mobilePhone && (
+              <p className="pt-2.5 text-red-500">
+                {errors.mobilePhone.message}
+              </p>
+            )}
+          </div>
+
+          {/* <div className="w-full">
             <label
               htmlFor="destination"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -302,8 +375,8 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 {errors.destination.message}
               </p>
             )}
-          </div>
-          <div className="w-full">
+          </div> */}
+          {/* <div className="w-full">
             <label
               htmlFor="arrival-time"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -403,7 +476,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                   {errors.departureTime.message}
                 </p>
               )}
-          </div>
+          </div> */}
         </div>
 
         <button
