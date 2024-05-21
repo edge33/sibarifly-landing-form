@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import instance from '../axios/axiosInstance';
-import { LandingFormData } from '../types';
+import { EventFormData } from '../types';
 
 type SummaryProps = {
-  landingData: LandingFormData;
+  landingData: EventFormData;
   onEditButtonClicked: () => void;
   onResetButtonClicked: () => void;
 };
@@ -14,15 +14,17 @@ const Summary = ({
   onResetButtonClicked,
 }: SummaryProps) => {
   const {
-    arrivalTime,
-    date,
+    dateTime,
+    aircraftType,
+    emailAddress,
+    eventType,
+    mobilePhone,
+    aircraftRegistration,
     departure,
-    departureTime,
     destination,
-    model,
+    aircraftModel,
     paxNumber,
     pilotInCommand,
-    registration,
     firstOfficer,
   } = landingData;
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -43,109 +45,140 @@ const Summary = ({
 
   return (
     <>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-        Report atterraggio
+      <h2 className="text-xl font-semibold text-gray-900 print:text-gray-900 dark:text-white sm:text-2xl flex gap-4">
+        <img
+          src="/SibaryFlyLogo.png"
+          className="h-8 hidden print:block"
+          alt="club-logo"
+        />{' '}
+        Report {eventType === 'ARRIVAL' ? 'arrivo' : 'partenza'}
       </h2>
       <div className="flex flex-col gap-6 mt-8 md:sm-6 border-b border-t border-gray-200 py-8 dark:border-gray-700">
         <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
           <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
-              Data di arrivo
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+              Data e ora
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
-              {new Date(date)
-                .toISOString()
-                .split('T')[0]
-                .split('-')
-                .reverse()
-                .join('/')}
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
-              Marche aeromobile
-            </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
-              {registration}
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
-              Tipo aeromobile
-            </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
-              {model}
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+              {new Date(dateTime).toLocaleString()}
             </dd>
           </dl>
         </div>
         <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
           <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+              Marche aeromobile
+            </dt>
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+              {aircraftRegistration}
+            </dd>
+          </dl>
+          <dl>
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+              Modello aeromobile
+            </dt>
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+              {aircraftModel}
+            </dd>
+          </dl>
+          <dl>
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+              Tipo aeromobile
+            </dt>
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+              {aircraftType}
+            </dd>
+          </dl>
+        </div>
+
+        <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
+          <dl>
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               Pilota
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
               {pilotInCommand}
             </dd>
           </dl>
           <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               Copilota
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
               {firstOfficer}
             </dd>
           </dl>
           <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               N° passeggeri
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
               {paxNumber}
             </dd>
           </dl>
         </div>
         <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
           <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               Partenza
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
               {departure}
             </dd>
           </dl>
           <dl className="print:col-start-3 md:col-start-3">
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               Destinazione
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
               {destination}
             </dd>
           </dl>
         </div>
-        <div className="grid print:justify-between print:grid-cols-3 md:grid-cols-3 md:justify-between gap-8">
+        {/* <div className="grid print:justify-between print:grid-cols-3 md:grid-cols-3 md:justify-between gap-8">
           <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               Orario arrivo
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
               {arrivalTime}
             </dd>
           </dl>
           <dl className="print:col-start-3 md:col-start-3">
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               Orario di partenza
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
               {departureTime}
             </dd>
           </dl>
+        </div> */}
+
+        <div className="grid print:justify-between print:grid-cols-3 md:grid-cols-3 md:justify-between gap-8">
+          <dl>
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+              Numero di telefono
+            </dt>
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+              {mobilePhone}
+            </dd>
+          </dl>
+          <dl className="print:col-start-3 md:col-start-3">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+              Inidirizzo email
+            </dt>
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+              {emailAddress}
+            </dd>
+          </dl>
         </div>
+
         <div className="hidden print:grid print:justify-between print:grid-cols-3 md:grid-cols-3 md:justify-between gap-8">
           <dl>
-            <dt className="text-base font-medium text-gray-900 dark:text-white">
+            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
               Firma
             </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400"></dd>
+            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400"></dd>
           </dl>
         </div>
       </div>
@@ -178,14 +211,14 @@ const Summary = ({
         <button
           onClick={onEditButtonClicked}
           type="button"
-          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 print:text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
           Modifica
         </button>
         <button
           onClick={onResetButtonClicked}
           type="button"
-          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 print:text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
           Nuovo report
         </button>

@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import LandingForm from './components/LandingForm';
+import EventForm from './components/EventForm/EventForm';
 import Layout from './components/Layout';
-import type { LandingFormData } from './types';
+import type { EventFormData } from './types';
 import Summary from './components/Summary';
 
 function App() {
   const [viewSummary, setViewSummary] = useState(false);
-  const [landingData, setLandingData] = useState<LandingFormData>();
+  const [landingData, setLandingData] = useState<EventFormData>();
 
-  const saveLandingData = (data: LandingFormData) => {
+  const saveLandingData = (data: EventFormData) => {
     setLandingData(data);
     setViewSummary(true);
   };
@@ -31,7 +31,7 @@ function App() {
           onResetButtonClicked={onResetButtonClicked}
         />
       ) : (
-        <LandingForm
+        <EventForm
           onLandingDataFiled={saveLandingData}
           initialData={landingData}
         />
