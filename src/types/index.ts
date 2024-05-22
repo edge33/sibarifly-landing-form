@@ -3,12 +3,12 @@ export const DEPARTURE = 'DEPARTURE';
 type EventType = typeof ARRIVAL | typeof DEPARTURE;
 
 export const GA = 'GA';
-export const ULV = 'ULV';
+export const ULM = 'ULM';
 
 export type EventFormData = {
   dateTime: string;
   eventType: EventType;
-  aircraftType: typeof GA | typeof ULV;
+  aircraftType: typeof GA | typeof ULM;
   aircraftRegistration: string;
   aircraftModel: string;
   pilotInCommand: string;
