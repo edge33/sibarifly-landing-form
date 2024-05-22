@@ -1,5 +1,5 @@
 import { z, ZodType } from 'zod';
-import { GA, ARRIVAL, DEPARTURE, ULV } from '../../types';
+import { GA, ARRIVAL, DEPARTURE, ULM } from '../../types';
 
 const requiredString = z
   .string()
@@ -37,7 +37,7 @@ export const EventFormSchema: ZodType = z.object({
   // return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   // })
   eventType: z.union([z.literal(ARRIVAL), z.literal(DEPARTURE)]),
-  aircraftType: z.union([z.literal(GA), z.literal(ULV)]),
+  aircraftType: z.union([z.literal(GA), z.literal(ULM)]),
 
   aircraftRegistration: requiredString,
   aircraftModel: requiredString,
