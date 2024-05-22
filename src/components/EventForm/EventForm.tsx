@@ -61,7 +61,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
       </h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-          <div className="sm:col-span-2">
+          <div className="col-span-2">
             <p className="block text-sm font-medium text-gray-900 dark:text-white">
               Evento *
             </p>
@@ -105,12 +105,12 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             </label>
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="col-span-2">
             <label
               htmlFor="dateTime"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Data atterraggio *
+              Data evento *
             </label>
 
             <div className="relative">
@@ -138,7 +138,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="col-span-2">
             <p className="block text-sm font-medium text-gray-900 dark:text-white">
               Tipo di velivolo *
             </p>
@@ -176,7 +176,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             </label>
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="col-span-2">
             {errors?.aircraftType && (
               <p className="pt-2.5 text-red-500">
                 {errors.aircraftType.message}
@@ -184,7 +184,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="w-full">
+          <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="aircraftRegistration"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -205,7 +205,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="w-full">
+          <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="aircraftModel"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -227,7 +227,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="pic"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -247,7 +247,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="sm:col-span-2">
+          <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="pic"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -267,7 +267,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="w-full">
+          <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="pax"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -285,8 +285,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               <p className="pt-2.5 text-red-500">{errors.paxNumber.message}</p>
             )}
           </div>
-
-          <div className="w-full" />
 
           <div className="col-span-2">
             <label
@@ -308,7 +306,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="w-full sm:col-span-2">
+          <div className="col-span-2">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">
               Dettagli di contatto
             </h2>
@@ -317,7 +315,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               di SibariFly
             </p>
           </div>
-          <div className="w-full">
+          <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="email"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -337,7 +335,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
-          <div className="w-full">
+          <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="mobilePhone"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -478,13 +476,14 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               )}
           </div> */}
         </div>
-
-        <button
-          type="submit"
-          className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-        >
-          Conferma
-        </button>
+        <div className="mt-6 print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
+          <button
+            type="submit"
+            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+          >
+            Conferma
+          </button>
+        </div>
       </form>
     </>
   );
