@@ -1,8 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-// import LandingDatepicker from './LandingDatePicker';
-import { GA, ARRIVAL, type EventFormData, DEPARTURE } from '../../types';
 import { EventFormSchema } from './EventFormSchema';
+import { EventFormData, GA, ARRIVAL, DEPARTURE } from '../../../../types';
 
 const getCurrentDateTime = () => {
   const now = new Date();

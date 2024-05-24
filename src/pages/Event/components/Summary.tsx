@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import instance from '../axios/axiosInstance';
-import { EventFormData } from '../types';
+import instance from '../../../axios/axiosInstance';
+import { EventFormData } from '../../../types';
+import useHttp from '../../../hooks/useHttp';
+
+const handler = (data: EventFormData) => instance.post('/events', data);
 
 type SummaryProps = {
   landingData: EventFormData;
@@ -27,21 +29,17 @@ const Summary = ({
     pilotInCommand,
     firstOfficer,
   } = landingData;
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const [saveError, setSaveError] = useState(false);
+
+  const { data, error, pending, trigger, response } = useHttp(handler);
+
+  const saveSuccess = response?.status === 201 && !error && !pending;
 
   const postLandingData = async () => {
-    try {
-      const result = await instance.post('/events', landingData);
-      if (result.status === 201) {
-        setSaveSuccess(true);
-      }
-    } catch (error) {
-      console.error(error);
-      setSaveSuccess(false);
-      setSaveError(true);
-    }
+    if (pending) return;
+    trigger(landingData);
   };
+
+  console.log('dsfsdf', data, error, pending);
 
   return (
     <>
@@ -183,7 +181,7 @@ const Summary = ({
         </div>
       </div>
 
-      {saveError && !saveSuccess && (
+      {error && !saveSuccess && (
         <div className="mt-6 print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
           <p className="text-red-500">Errore salvataggio report</p>
         </div>
@@ -192,6 +190,7 @@ const Summary = ({
       <div className="mt-6 print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
         {!saveSuccess && (
           <button
+            disabled={pending}
             onClick={postLandingData}
             type="submit"
             className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
@@ -208,13 +207,15 @@ const Summary = ({
             Stampa report
           </button>
         )}
-        <button
-          onClick={onEditButtonClicked}
-          type="button"
-          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 print:text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-        >
-          Modifica
-        </button>
+        {!saveSuccess && (
+          <button
+            onClick={onEditButtonClicked}
+            type="button"
+            className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 print:text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            Modifica
+          </button>
+        )}
         <button
           onClick={onResetButtonClicked}
           type="button"

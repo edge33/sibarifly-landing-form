@@ -1,5 +1,5 @@
 import { z, ZodType } from 'zod';
-import { GA, ARRIVAL, DEPARTURE, ULM } from '../../types';
+import { ARRIVAL, DEPARTURE, GA, ULM } from '../../../../types';
 
 const requiredString = z
   .string()

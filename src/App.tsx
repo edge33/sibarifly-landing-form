@@ -1,43 +1,38 @@
-import { useState } from 'react';
-import EventForm from './components/EventForm/EventForm';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+// import { useAuthContext } from './authContext/AuthContext';
 import Layout from './components/Layout';
-import type { EventFormData } from './types';
-import Summary from './components/Summary';
+// import Login from './pages/Auth/Login';
+import Event from './pages/Event/Event';
+import ErrorPage from './pages/ErrorPage';
+// import EventManager from './pages/Private/EventManager';
 
-function App() {
-  const [viewSummary, setViewSummary] = useState(false);
-  const [landingData, setLandingData] = useState<EventFormData>();
+const App = () => {
+  // const { authenticated } = useAuthContext();
 
-  const saveLandingData = (data: EventFormData) => {
-    setLandingData(data);
-    setViewSummary(true);
-  };
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Layout />,
+      children: [
+        {
+          path: '/',
+          element: <Event />,
+        },
+        // !authenticated ? { path: '/auth', element: <Login /> } : {},
+        // authenticated ? { path: '/manage', element: <EventManager /> } : {},
+      ],
+    },
+    {
+      path: '/*',
+      element: (
+        <Layout>
+          <ErrorPage />
+        </Layout>
+      ),
+    },
+  ]);
 
-  const onEditButtonClicked = () => {
-    setViewSummary(false);
-  };
-
-  const onResetButtonClicked = () => {
-    setLandingData(undefined);
-    setViewSummary(false);
-  };
-
-  return (
-    <Layout>
-      {landingData && viewSummary ? (
-        <Summary
-          landingData={landingData}
-          onEditButtonClicked={onEditButtonClicked}
-          onResetButtonClicked={onResetButtonClicked}
-        />
-      ) : (
-        <EventForm
-          onLandingDataFiled={saveLandingData}
-          initialData={landingData}
-        />
-      )}
-    </Layout>
-  );
-}
+  return <RouterProvider router={router} />;
+};
 
 export default App;

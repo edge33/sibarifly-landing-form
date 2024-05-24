@@ -53,4 +53,8 @@ instance.interceptors.response.use(
   },
 );
 
+export const setToken = (token: string) => {
+  instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+};
+
 export default instance;
