@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
 import Navbar from './Navbar';
 
@@ -10,7 +11,10 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col justify-between h-full">
       <Navbar />
       <section>
-        <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">{children}</div>
+        <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+          <Outlet />
+          {children}
+        </div>
       </section>
       <Footer />
     </div>
