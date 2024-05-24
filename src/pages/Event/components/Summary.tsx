@@ -1,8 +1,6 @@
 import instance from '../../../axios/axiosInstance';
-import { EventFormData } from '../../../types';
-import useHttp from '../../../hooks/useHttp';
-
-const handler = (data: EventFormData) => instance.post('/events', data);
+import { EventData, EventFormData, STOP } from '../../../types';
+import { useState } from 'react';
 
 type SummaryProps = {
   landingData: EventFormData;
@@ -10,13 +8,16 @@ type SummaryProps = {
   onResetButtonClicked: () => void;
 };
 
+const EVENT_MAP = { ARRIVAL: 'arrivo', DEPARTURE: 'partenza', STOP: 'sosta' };
+
 const Summary = ({
   landingData,
   onEditButtonClicked,
   onResetButtonClicked,
 }: SummaryProps) => {
   const {
-    dateTime,
+    departureDateTime,
+    arrivalDateTime,
     aircraftType,
     emailAddress,
     eventType,
@@ -30,16 +31,75 @@ const Summary = ({
     firstOfficer,
   } = landingData;
 
-  const { data, error, pending, trigger, response } = useHttp(handler);
-
-  const saveSuccess = response?.status === 201 && !error && !pending;
+  const [saveSuccess, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [pending, setPending] = useState(false);
 
   const postLandingData = async () => {
     if (pending) return;
-    trigger(landingData);
+
+    setPending(true);
+    const events: EventData[] = [];
+    setError(false);
+
+    if (eventType === STOP) {
+      events.push({
+        dateTime: arrivalDateTime,
+        eventType: 'ARRIVAL',
+        aircraftType,
+        aircraftRegistration,
+        aircraftModel,
+        pilotInCommand,
+        firstOfficer,
+        paxNumber,
+        departure,
+        destination: 'Sibari',
+        mobilePhone,
+        emailAddress,
+      });
+      events.push({
+        dateTime: departureDateTime,
+        eventType: 'DEPARTURE',
+        aircraftType,
+        aircraftRegistration,
+        aircraftModel,
+        pilotInCommand,
+        firstOfficer,
+        paxNumber,
+        departure: 'Sibari',
+        destination,
+        mobilePhone,
+        emailAddress,
+      });
+    } else {
+      events.push({
+        dateTime: arrivalDateTime,
+        eventType,
+        aircraftType,
+        aircraftRegistration,
+        aircraftModel,
+        pilotInCommand,
+        firstOfficer,
+        paxNumber,
+        departure,
+        destination,
+        mobilePhone,
+        emailAddress,
+      });
+    }
+
+    try {
+      await Promise.all(events.map(event => instance.post('/events', event)));
+      setSuccess(true);
+    } catch (error) {
+      console.error(error);
+      setError(true);
+    }
+
+    setPending(false);
   };
 
-  console.log('dsfsdf', data, error, pending);
+  const isStop = eventType === STOP;
 
   return (
     <>
@@ -49,19 +109,42 @@ const Summary = ({
           className="h-8 hidden print:block"
           alt="club-logo"
         />{' '}
-        Report {eventType === 'ARRIVAL' ? 'arrivo' : 'partenza'}
+        Report {EVENT_MAP[eventType]}
       </h2>
       <div className="flex flex-col gap-6 mt-8 md:sm-6 border-b border-t border-gray-200 py-8 dark:border-gray-700">
-        <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
-          <dl>
-            <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
-              Data e ora
-            </dt>
-            <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
-              {new Date(dateTime).toLocaleString()}
-            </dd>
-          </dl>
-        </div>
+        {isStop ? (
+          <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
+            <dl>
+              <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+                Data e ora di arrivo
+              </dt>
+              <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+                {new Date(arrivalDateTime).toLocaleString()}
+              </dd>
+            </dl>
+            <dl />
+            <dl>
+              <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+                Data e ora di partenza
+              </dt>
+              <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+                {new Date(departureDateTime).toLocaleString()}
+              </dd>
+            </dl>
+          </div>
+        ) : (
+          <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
+            <dl>
+              <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">
+                Data e ora
+              </dt>
+              <dd className="mt-1 text-base font-normal text-gray-500 print:text-gray-500 dark:text-gray-400">
+                {new Date(arrivalDateTime).toLocaleString()}
+              </dd>
+            </dl>
+          </div>
+        )}
+
         <div className="grid print:grid-cols-3 md:grid-cols-3 gap-8 print:justify-between md:justify-between">
           <dl>
             <dt className="text-base font-medium text-gray-900 print:text-gray-900 dark:text-white">

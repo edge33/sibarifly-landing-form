@@ -1,10 +1,23 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { EventFormSchema } from './EventFormSchema';
-import { EventFormData, GA, ARRIVAL, DEPARTURE } from '../../../../types';
+import { EventFormData, GA, ARRIVAL, DEPARTURE, STOP } from '../../../../types';
 
 const getCurrentDateTime = () => {
   const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
+const anHourFromNow = () => {
+  const now = new Date();
+  now.setHours(now.getHours() + 1);
 
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
@@ -31,7 +44,8 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
     defaultValues: initialData
       ? initialData
       : {
-          dateTime: getCurrentDateTime(),
+          departureDateTime: anHourFromNow(),
+          arrivalDateTime: getCurrentDateTime(),
           aircraftType: GA,
           eventType: ARRIVAL,
         },
@@ -65,51 +79,72 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               Evento *
             </p>
           </div>
+          <div className="col-span-2 flex flex-col md:flex-row justify-between w-full gap-4 sm:gap-6">
+            <div className="flex items-center">
+              <input
+                id="arrival-radio"
+                type="radio"
+                value="ARRIVAL"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                {...register('eventType')}
+                onClick={() => {
+                  setValue('eventType', 'ARRIVAL', { shouldValidate: true });
+                }}
+              />
+              <label
+                htmlFor="arrival-radio"
+                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Arrivo
+              </label>
+            </div>
 
-          <div className="flex items-center">
-            <input
-              id="landing-radio"
-              type="radio"
-              value="ARRIVAL"
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              {...register('eventType')}
-              onClick={() => {
-                setValue('eventType', 'ARRIVAL', { shouldValidate: true });
-              }}
-            />
-            <label
-              htmlFor="landing-radio"
-              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Atterraggio
-            </label>
+            <div className="flex items-center">
+              <input
+                id="departure-radio"
+                type="radio"
+                value="DEPARTURE"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                {...register('eventType')}
+                onClick={() => {
+                  setValue('eventType', 'DEPARTURE', { shouldValidate: true });
+                }}
+              />
+              <label
+                htmlFor="departure-radio"
+                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Partenza
+              </label>
+            </div>
+
+            <div className="flex items-center">
+              <input
+                id="stop-radio"
+                type="radio"
+                value="STOP"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                {...register('eventType')}
+                onClick={() => {
+                  setValue('eventType', 'STOP', { shouldValidate: true });
+                }}
+              />
+              <label
+                htmlFor="stop-radio"
+                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Stop in giornata
+              </label>
+            </div>
           </div>
 
-          <div className="flex items-center">
-            <input
-              id="departure-radio"
-              type="radio"
-              value="DEPARTURE"
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              {...register('eventType')}
-              onClick={() => {
-                setValue('eventType', 'DEPARTURE', { shouldValidate: true });
-              }}
-            />
-            <label
-              htmlFor="departure-radio"
-              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Partenza
-            </label>
-          </div>
-
+          {/* ARRIVAL DATE */}
           <div className="col-span-2">
             <label
               htmlFor="dateTime"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Data evento *
+              Data {eventType !== STOP ? 'evento' : 'arrivo'} *
             </label>
 
             <div className="relative">
@@ -128,21 +163,60 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 max={getCurrentDateTime()}
                 type="datetime-local"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register('dateTime')}
+                {...register('arrivalDateTime')}
               />
             </div>
 
-            {errors?.dateTime && (
-              <p className="text-red-500">{errors.dateTime.message}</p>
+            {errors?.arrivalDateTime && (
+              <p className="pt-2.5 text-red-500">
+                {errors.arrivalDateTime.message}
+              </p>
             )}
           </div>
+
+          {/* DEPARTURE DATE */}
+          {eventType === STOP && (
+            <div className="col-span-2">
+              <label
+                htmlFor="dateTime"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Data {eventType !== STOP ? 'evento' : 'partenza'} *
+              </label>
+
+              <div className="relative">
+                <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                  <svg
+                    className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                  </svg>
+                </div>
+                <input
+                  max={getCurrentDateTime()}
+                  type="datetime-local"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  {...register('departureDateTime')}
+                />
+              </div>
+
+              {errors?.departureDateTime && (
+                <p className="pt-2.5 text-red-500">
+                  {errors.departureDateTime.message}
+                </p>
+              )}
+            </div>
+          )}
 
           <div className="col-span-2">
             <p className="block text-sm font-medium text-gray-900 dark:text-white">
               Tipo di velivolo *
             </p>
           </div>
-
           <div className="flex items-center">
             <input
               id="ga-radio"
@@ -158,7 +232,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               GA
             </label>
           </div>
-
           <div className="flex items-center">
             <input
               id="ulm-radio"
@@ -174,7 +247,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               ULM
             </label>
           </div>
-
           <div className="col-span-2">
             {errors?.aircraftType && (
               <p className="pt-2.5 text-red-500">
@@ -182,7 +254,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-
           <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="aircraftRegistration"
@@ -203,7 +274,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-
           <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="aircraftModel"
@@ -225,7 +295,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-
           <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="pic"
@@ -245,7 +314,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-
           <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="pic"
@@ -265,7 +333,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-
           <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="pax"
@@ -285,6 +352,30 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             )}
           </div>
 
+          {/* DEPARTURE */}
+          {eventType === STOP && (
+            <div className="col-span-2">
+              <label
+                htmlFor="departure"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Provenienza
+              </label>
+              <input
+                type="text"
+                id="departure"
+                className={`${errors.departure && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+                {...register('departure')}
+              />
+              {errors?.departure && (
+                <p className="pt-2.5 text-red-500">
+                  {errors.departure.message}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* DESTINATION */}
           <div className="col-span-2">
             <label
               htmlFor="destination"
@@ -333,7 +424,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-
           <div className="col-span-2 sm:col-span-1">
             <label
               htmlFor="mobilePhone"
@@ -353,7 +443,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-
           {/* <div className="w-full">
             <label
               htmlFor="mobilePhone"
