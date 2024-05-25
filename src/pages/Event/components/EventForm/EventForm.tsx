@@ -70,13 +70,13 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
   return (
     <>
       <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-        Registra evento
+        Log event
       </h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
           <div className="col-span-2">
             <p className="block text-sm font-medium text-gray-900 dark:text-white">
-              Evento *
+              Event type *
             </p>
           </div>
           <div className="col-span-2 flex flex-col md:flex-row justify-between w-full gap-4 sm:gap-6">
@@ -95,7 +95,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 htmlFor="arrival-radio"
                 className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Arrivo
+                Arrival
               </label>
             </div>
 
@@ -114,7 +114,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 htmlFor="departure-radio"
                 className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Partenza
+                Departure
               </label>
             </div>
 
@@ -133,7 +133,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 htmlFor="stop-radio"
                 className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Stop in giornata
+                Fuel stop
               </label>
             </div>
           </div>
@@ -144,7 +144,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="dateTime"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Data {eventType !== STOP ? 'evento' : 'arrivo'} *
+              {eventType !== STOP ? 'Event' : 'Arrival'} date *
             </label>
 
             <div className="relative">
@@ -181,7 +181,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 htmlFor="dateTime"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Data {eventType !== STOP ? 'evento' : 'partenza'} *
+                {eventType !== STOP ? 'Event' : 'Departure'} date *
               </label>
 
               <div className="relative">
@@ -197,7 +197,6 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                   </svg>
                 </div>
                 <input
-                  max={getCurrentDateTime()}
                   type="datetime-local"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   {...register('departureDateTime')}
@@ -214,7 +213,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
 
           <div className="col-span-2">
             <p className="block text-sm font-medium text-gray-900 dark:text-white">
-              Tipo di velivolo *
+              Aircraft type *
             </p>
           </div>
           <div className="flex items-center">
@@ -259,13 +258,12 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="aircraftRegistration"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Registrazione *
+              Registration mark *
             </label>
             <input
               type="text"
               id="aircraftRegistration"
               className={`${errors.aircraftRegistration && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-              placeholder="I-6897"
               {...register('aircraftRegistration')}
             />
             {errors?.aircraftRegistration && (
@@ -279,13 +277,12 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="aircraftModel"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Aereo *
+              Aircraft model *
             </label>
             <input
               type="text"
               id="aircraftModel"
               className={`${errors.aircraftModel && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-              placeholder="C-172"
               {...register('aircraftModel')}
               min={0}
             />
@@ -300,7 +297,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="pic"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Pilota responsabile *
+              Pilot in command *
             </label>
             <input
               type="text"
@@ -319,7 +316,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="pic"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Copilota
+              First officer
             </label>
             <input
               type="text"
@@ -338,7 +335,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="pax"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Passeggeri *
+              Passengers *
             </label>
             <input
               type="number"
@@ -359,7 +356,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 htmlFor="departure"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Provenienza
+                Departure airfield
               </label>
               <input
                 type="text"
@@ -381,7 +378,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="destination"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              {eventType === ARRIVAL ? 'Provenienza' : 'Destinazione'}
+              {eventType === ARRIVAL ? 'Departure' : 'Destination'} airfield
             </label>
             <input
               type="text"
@@ -398,11 +395,12 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
 
           <div className="col-span-2">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-              Dettagli di contatto
+              Contact details
             </h2>
             <p className="text-sm text-gray-900 dark:text-white">
-              Aggiungi i tuoi contatti per rimanere informato sulle iniziative
-              di SibariFly
+              Providing your contact details is optional. By doing so, you agree
+              to receive communications from SibariFly about future initiatives.
+              SibariFly will never share your data with third parties.
             </p>
           </div>
           <div className="col-span-2 sm:col-span-1">
@@ -410,7 +408,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="email"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Indirizzo email
+              Email address
             </label>
             <input
               type="email"
@@ -429,7 +427,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               htmlFor="mobilePhone"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Numero di telefono
+              Phone number
             </label>
             <input
               type="tel"
@@ -443,173 +441,13 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               </p>
             )}
           </div>
-          {/* <div className="w-full">
-            <label
-              htmlFor="mobilePhone"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Numero di telefono
-            </label>
-            <input
-              type="tel"
-              id="mobilePhone"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              {...register('mobilePhone')}
-            />
-            {errors?.mobilePhone && (
-              <p className="pt-2.5 text-red-500">
-                {errors.mobilePhone.message}
-              </p>
-            )}
-          </div>
-
-          {/* <div className="w-full">
-            <label
-              htmlFor="mobilePhone"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Numero di telefono
-            </label>
-            <input
-              type="tel"
-              id="mobilePhone"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              {...register('mobilePhone')}
-            />
-            {errors?.mobilePhone && (
-              <p className="pt-2.5 text-red-500">
-                {errors.mobilePhone.message}
-              </p>
-            )}
-          </div>
-
-          {/* <div className="w-full">
-            <label
-              htmlFor="destination"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              A
-            </label>
-            <input
-              type="text"
-              id="destination"
-              className={`${errors.destination && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-              {...register('destination')}
-            />
-            {errors?.destination && (
-              <p className="pt-2.5 text-red-500">
-                {errors.destination.message}
-              </p>
-            )}
-          </div> */}
-          {/* <div className="w-full">
-            <label
-              htmlFor="arrival-time"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Ora di arrivo
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <input
-                type="time"
-                id="arrival-time"
-                className={`${errors.arrivalTime && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-                {...register('arrivalTime')}
-                onChange={event => {
-                  setValue('arrivalTime', event.target.value, {
-                    shouldValidate: true,
-                  });
-                  console.log('cross set', getValues().departureTime);
-
-                  setValue('departureTime', getValues().departureTime, {
-                    shouldValidate: true,
-                  });
-                }}
-              />
-            </div>
-            {errors?.arrivalTime &&
-              errors?.arrivalTime.type !== z.ZodIssueCode.custom && (
-                <p className="pt-2.5 text-red-500">
-                  {errors.arrivalTime.message}
-                </p>
-              )}
-          </div>
-
-          <div className="w-full">
-            <label
-              htmlFor="departure-time"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Ora di partenza
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <input
-                type="time"
-                id="departure-time"
-                className={`${errors.departureTime && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-                {...register('departureTime')}
-                onChange={event => {
-                  setValue('departureTime', event.target.value, {
-                    shouldValidate: true,
-                  });
-                  setValue('arrivalTime', getValues().arrivalTime, {
-                    shouldValidate: true,
-                  });
-                }}
-              />
-            </div>
-            {errors.departureTime &&
-              errors.departureTime.type !== z.ZodIssueCode.custom && (
-                <p className="pt-2.5 text-red-500">
-                  {errors.departureTime.message}
-                </p>
-              )}
-          </div>
-          <div className="sm:col-span-2">
-            {errors.departureTime &&
-              errors.departureTime.type === z.ZodIssueCode.custom && (
-                <p className="pt-2.5 text-red-500">
-                  {errors.departureTime.message}
-                </p>
-              )}
-          </div> */}
         </div>
         <div className="mt-6 print:hidden flex flex-col md:flex-row gap-4 sm:gap-6">
           <button
             type="submit"
             className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
           >
-            Conferma
+            Submit
           </button>
         </div>
       </form>

@@ -1,45 +1,24 @@
 import { z, ZodType } from 'zod';
 import { ARRIVAL, DEPARTURE, GA, STOP, ULM } from '../../../../types';
 
-const requiredString = z
-  .string()
-  .trim()
-  .min(1, { message: 'Questo campo è obbligatorio' });
+const mandatoryField = 'This field is mandatory';
 
-const presentDateError = 'La data non può essere futura';
+const requiredString = z.string().trim().min(1, { message: mandatoryField });
 
-// .refine(
-//   time_ => {
-//     const currentDate_ = new Date();
-//     const currentTime = `${currentDate_.getHours()}:${currentDate_.getMinutes()}`;
-//     return (
-//       new Date(`1970/01/01 ${time_}`) <= new Date(`1970/01/01 ${currentTime}`)
-//     );
-//   },
-//   {
-//     message: "L'ora di arrivo non può essere posteriore all'ora attuale",
-//   },
-// );
+const presentDateError = 'Date cannot be in the future';
 
 export const EventFormSchema: ZodType = z
   .object({
-    arrivalDateTime: z.coerce
-      .string({ required_error: 'Il campo è obbligatorio' })
-      .refine(
-        data_ => {
-          return new Date(data_) <= new Date();
-        },
-        {
-          message: presentDateError,
-        },
-      ),
+    arrivalDateTime: z.coerce.string({ required_error: mandatoryField }).refine(
+      data_ => {
+        return new Date(data_) <= new Date();
+      },
+      {
+        message: presentDateError,
+      },
+    ),
     departureDateTime: z.string(),
-    // .transform(val => {
-    // console.log('date ', val);
 
-    // const date = new Date(val);
-    // return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-    // })
     eventType: z.union([
       z.literal(ARRIVAL),
       z.literal(DEPARTURE),
@@ -53,8 +32,8 @@ export const EventFormSchema: ZodType = z
     firstOfficer: z.string().optional(),
     paxNumber: z.coerce
       .number()
-      .gte(0, 'Il valore minimo ammesso è zero')
-      .lte(50, 'Il valore massimo ammesso è 50')
+      .gte(0, 'Minimum value is zero')
+      .lte(50, 'Maximum value is 50')
       .optional(),
     departure: z.string().optional(),
     destination: requiredString,
@@ -66,12 +45,12 @@ export const EventFormSchema: ZodType = z
           return !val || /^\+{0,1}\d+$/.test(val);
         },
         {
-          message: 'Il numero di telefono deve essere composto da cifre',
+          message: 'The phone number must consist of digits.',
         },
       ),
     emailAddress: z.union([
       z.literal(''),
-      z.string().email({ message: 'Inserisci un indirizzo email valido' }),
+      z.string().email({ message: 'Type a valid email address' }),
     ]),
   })
   .superRefine(
@@ -81,15 +60,7 @@ export const EventFormSchema: ZodType = z
           ctx.addIssue({
             path: ['departureDateTime'],
             code: z.ZodIssueCode.custom,
-            message: 'Il campo è obbligatorio',
-          });
-        }
-
-        if (new Date(departureDateTime) > new Date()) {
-          ctx.addIssue({
-            path: ['departureDateTime'],
-            code: z.ZodIssueCode.custom,
-            message: presentDateError,
+            message: mandatoryField,
           });
         }
 
@@ -97,8 +68,7 @@ export const EventFormSchema: ZodType = z
           ctx.addIssue({
             path: ['departureDateTime'],
             code: z.ZodIssueCode.custom,
-            message:
-              'La data di partenza deve essere posteriore alla data di arrivo',
+            message: 'The departure date must be later than the arrival date.',
           });
         }
 
@@ -106,29 +76,9 @@ export const EventFormSchema: ZodType = z
           ctx.addIssue({
             path: ['departure'],
             code: z.ZodIssueCode.custom,
-            message: 'Il campo è obbligatorio',
+            message: mandatoryField,
           });
         }
       }
     },
   );
-//   .superRefine(({ arrivalTime, departureTime }, ctx) => {
-//     if (
-//       new Date(`1970/01/01 ${arrivalTime}`) >
-//       new Date(`1970/01/01 ${departureTime}`)
-//     ) {
-//       ctx.addIssue({
-//         path: ['arrivalTime'],
-//         code: z.ZodIssueCode.custom,
-//         message:
-//           'La data di partenza deve essere posteriore alla data di arrivo',
-//       });
-
-//       ctx.addIssue({
-//         path: ['departureTime'],
-//         code: z.ZodIssueCode.custom,
-//         fatal: true,
-//         message:
-//           'La data di partenza deve essere posteriore alla data di arrivo',
-//       });
-//     }
