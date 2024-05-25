@@ -1,4 +1,5 @@
 import instance from '../../../axios/axiosInstance';
+import Spinner from '../../../components/Spinner';
 import { EventData, EventFormData, STOP } from '../../../types';
 import { useState } from 'react';
 
@@ -40,7 +41,9 @@ const Summary = ({
   const [pending, setPending] = useState(false);
 
   const postLandingData = async () => {
-    if (pending) return;
+    if (pending) {
+      return;
+    }
 
     setPending(true);
     const events: EventData[] = [];
@@ -267,7 +270,13 @@ const Summary = ({
             Save log
           </button>
         )}
-        {saveSuccess && (
+        {pending && (
+          <div className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white">
+            <Spinner />
+          </div>
+        )}
+
+        {!pending && saveSuccess && (
           <button
             onClick={() => window.print()}
             type="submit"
@@ -276,7 +285,7 @@ const Summary = ({
             Print log
           </button>
         )}
-        {!saveSuccess && (
+        {!pending && !saveSuccess && (
           <button
             onClick={onEditButtonClicked}
             type="button"
@@ -285,13 +294,15 @@ const Summary = ({
             Edit
           </button>
         )}
-        <button
-          onClick={onResetButtonClicked}
-          type="button"
-          className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 print:text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-        >
-          New log
-        </button>
+        {!pending && (
+          <button
+            onClick={onResetButtonClicked}
+            type="button"
+            className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 print:text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            New log
+          </button>
+        )}
       </div>
     </>
   );
