@@ -6,7 +6,7 @@ const Footer = () => {
         <a href="https://efem.dev" className="hover:underline" target="_blank">
           Francesco Maida
         </a>{' '}
-        per{' '}
+        for{' '}
         <a
           href="https://www.sibarifly.com/"
           className="hover:underline"
