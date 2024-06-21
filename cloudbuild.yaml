@@ -3,21 +3,32 @@
   steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$COMMIT_SHA', '--build-arg', 'VITE_API_URL=$_VITE_API_URL', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$BRANCH_NAME', '--build-arg', 'VITE_API_URL=$_VITE_API_URL', '.']
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$BRANCH_NAME']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
     - 'run'
+    - 'beta'
     - 'deploy'
-    - 'sibarifly-dashboard-webapp-$BRANCH_NAME'
+    - 'sibarifly-dashboard-$BRANCH_NAME'
+    - '--container'
+    - 'nginx'
     - '--image'
-    - 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$COMMIT_SHA'
+    - 'nginx'
+    - '--container'
+    - 'sibarifly-dashboard-webapp'
+    - '--image'
+    - 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$BRANCH_NAME'
+    - '--container'
+    - 'sibarifly-dashboard-api'
+    - '--image'
+    - 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-api:$BRANCH_NAME'
     - '--region'
     - 'europe-west8'
   images:
-  - 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$BRANCH_NAME'
 
