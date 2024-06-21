@@ -11,8 +11,8 @@
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-    - 'run'
     - 'beta'
+    - 'run'
     - 'deploy'
     - 'sibarifly-dashboard-$BRANCH_NAME'
     - '--container'
