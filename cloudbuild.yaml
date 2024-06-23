@@ -19,6 +19,8 @@
     - 'nginx'
     - '--image'
     - 'nginx'
+    - '--port'
+    - '8080'
     - '--container'
     - 'sibarifly-dashboard-webapp'
     - '--image'
