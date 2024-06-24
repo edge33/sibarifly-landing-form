@@ -15,6 +15,9 @@
     - 'run'
     - 'deploy'
     - 'sibarifly-dashboard-$BRANCH_NAME'
+    - '--region'
+    - 'europe-west8'
+    - '--allow-unauthenticated'
     - '--container'
     - 'nginx'
     - '--image'
@@ -29,9 +32,6 @@
     - 'sibarifly-dashboard-api'
     - '--image'
     - 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-api:$BRANCH_NAME'
-    # - '--region'
-    # - 'europe-west8'
-    # - '--allow-unauthenticated'
   images:
   - 'gcr.io/$PROJECT_ID/github.com/edge33/sibarifly-dashboard-webapp:$BRANCH_NAME'
 
