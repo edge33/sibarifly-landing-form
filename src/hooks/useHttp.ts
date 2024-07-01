@@ -1,9 +1,9 @@
 import { AxiosError, AxiosPromise, AxiosResponse } from 'axios';
 import { useCallback, useState } from 'react';
 
-const useHttp = <T>(handler: (data: T) => AxiosPromise) => {
+const useHttp = <RT, D>(handler: (data: RT) => AxiosPromise<D>) => {
   const [response, setResponse] = useState<AxiosResponse | null>(null);
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<D | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<{
     statusCode: number;
@@ -11,7 +11,7 @@ const useHttp = <T>(handler: (data: T) => AxiosPromise) => {
   } | null>(null);
 
   const trigger = useCallback(
-    (data: T): Promise<T> => {
+    (data: RT): Promise<D> => {
       return new Promise((resolve, reject) => {
         setPending(true);
         setResponse(null);

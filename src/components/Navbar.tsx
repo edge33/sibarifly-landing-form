@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
-import { Link, NavLink, NavLinkProps } from 'react-router-dom';
-// import { useAuthContext } from '../authContext/AuthContext';
+import { Link, NavLink, NavLinkProps, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../authContext/AuthContext';
 
 //outsurce this component to a separate file
 const CustomNavLink = ({ to, children, ...props }: NavLinkProps) => {
@@ -21,8 +21,8 @@ const CustomNavLink = ({ to, children, ...props }: NavLinkProps) => {
 };
 
 const Navbar = () => {
-  // const { authenticated, setAuthenticated } = useAuthContext();
-  // const navigate = useNavigate();
+  const { authenticated, logout } = useAuthContext();
+  const navigate = useNavigate();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   const toggleMenu = () => setIsMenuVisible(!isMenuVisible);
@@ -86,7 +86,7 @@ const Navbar = () => {
               <CustomNavLink to="/">Home</CustomNavLink>
             </li>
 
-            {/* {!authenticated && (
+            {!authenticated && (
               <li>
                 <CustomNavLink to="/auth">Login</CustomNavLink>
               </li>
@@ -102,14 +102,14 @@ const Navbar = () => {
                   to="/logout"
                   onClick={event => {
                     event.preventDefault();
-                    setAuthenticated(false);
+                    logout();
                     navigate('/');
                   }}
                 >
                   Logout
                 </CustomNavLink>
               </li>
-            )} */}
+            )}
           </ul>
           <button
             id="theme-toggle"

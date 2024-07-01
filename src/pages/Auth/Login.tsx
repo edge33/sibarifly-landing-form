@@ -1,11 +1,15 @@
 import { useRef } from 'react';
 import useHttp from '../../hooks/useHttp';
 import instance from '../../axios/axiosInstance';
+import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../authContext/AuthContext';
 
 const loginHandler = (data: { username: string; password: string }) =>
-  instance.post<{ username: string; password: string }>('/auth/login', data);
+  instance.post<{ token: string }>('/auth/login', data);
 
 const Login = () => {
+  const { authenticate } = useAuthContext();
+  const navigate = useNavigate();
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
@@ -21,7 +25,12 @@ const Login = () => {
     const passwordValue = passwordInputRef.current?.value as string;
 
     try {
-      await trigger({ username: usernameValue, password: passwordValue });
+      const data = await trigger({
+        username: usernameValue,
+        password: passwordValue,
+      });
+      authenticate(data.token);
+      navigate('/manage', { replace: true });
     } catch (error) {
       console.log(error);
     }
