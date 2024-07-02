@@ -2,31 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { EventFormSchema } from './EventFormSchema';
 import { EventFormData, GA, ARRIVAL, DEPARTURE, STOP } from '../../../../types';
-
-const getCurrentDateTime = () => {
-  const now = new Date();
-
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
-};
-
-const anHourFromNow = () => {
-  const now = new Date();
-  now.setHours(now.getHours() + 1);
-
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
-};
+import getCurrentDateTime from '../../../../utils/getCurrentDateTime';
+import anHourFromNow from '../../../../utils/anHourFromNow';
 
 type LandingFormProps = {
   onLandingDataFiled: (data: EventFormData) => void;

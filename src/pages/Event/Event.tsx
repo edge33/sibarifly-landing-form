@@ -23,7 +23,7 @@ function Event() {
   };
 
   return (
-    <>
+    <div className="max-w-2xl mx-auto">
       {landingData && viewSummary ? (
         <Summary
           landingData={landingData}
@@ -36,7 +36,7 @@ function Event() {
           initialData={landingData}
         />
       )}
-    </>
+    </div>
   );
 }
 
