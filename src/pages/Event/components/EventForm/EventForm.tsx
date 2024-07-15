@@ -11,6 +11,10 @@ type LandingFormProps = {
 };
 
 const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
+  const editMode = initialData?.eventId !== undefined;
+
+  console.log('open in editmode:', editMode);
+
   const {
     register,
     handleSubmit,
@@ -62,6 +66,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 id="arrival-radio"
                 type="radio"
                 value="ARRIVAL"
+                disabled={editMode}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 {...register('eventType')}
                 onClick={() => {
@@ -81,6 +86,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 id="departure-radio"
                 type="radio"
                 value="DEPARTURE"
+                disabled={editMode}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 {...register('eventType')}
                 onClick={() => {
@@ -100,6 +106,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
                 id="stop-radio"
                 type="radio"
                 value="STOP"
+                disabled={editMode}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 {...register('eventType')}
                 onClick={() => {
@@ -240,7 +247,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             <input
               type="text"
               id="aircraftRegistration"
-              className={`${errors.aircraftRegistration && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              className={`${errors.aircraftRegistration && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
               {...register('aircraftRegistration')}
             />
             {errors?.aircraftRegistration && (
@@ -259,7 +266,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             <input
               type="text"
               id="aircraftModel"
-              className={`${errors.aircraftModel && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              className={`${errors.aircraftModel && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
               {...register('aircraftModel')}
               min={0}
             />
@@ -279,7 +286,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             <input
               type="text"
               id="pic"
-              className={`${errors.pilotInCommand && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              className={`${errors.pilotInCommand && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
               {...register('pilotInCommand')}
             />
             {errors?.pilotInCommand && (
@@ -298,7 +305,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             <input
               type="text"
               id="firstOfficer"
-              className={`${errors.firstOfficer && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              className={`${errors.firstOfficer && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
               {...register('firstOfficer')}
             />
             {errors?.firstOfficer && (
@@ -338,7 +345,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
               <input
                 type="text"
                 id="departure"
-                className={`${errors.departure && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+                className={`${errors.departure && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
                 {...register('departure')}
               />
               {errors?.departure && (
@@ -360,7 +367,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
             <input
               type="text"
               id="destination"
-              className={`${errors.destination && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+              className={`${errors.destination && 'border-red-600 ring-red-600 dark:border-red-600 darkring-red-600'} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
               {...register('destination')}
             />
             {errors?.destination && (

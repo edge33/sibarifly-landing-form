@@ -1,15 +1,22 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import useHttp from '../../hooks/useHttp';
 import instance from '../../axios/axiosInstance';
-import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../authContext/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const loginHandler = (data: { username: string; password: string }) =>
   instance.post<{ token: string }>('/auth/login', data);
 
 const Login = () => {
-  const { authenticate } = useAuthContext();
   const navigate = useNavigate();
+  const { authenticate, authenticated } = useAuthContext();
+
+  useEffect(() => {
+    if (authenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [authenticated]);
+
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 

@@ -25,6 +25,7 @@ export type EventData = {
 };
 
 export type EventFormData = {
+  eventId?: number;
   arrivalDateTime: string;
   departureDateTime: string;
   eventType: EventType;

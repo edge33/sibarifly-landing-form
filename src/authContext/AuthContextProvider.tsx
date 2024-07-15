@@ -16,7 +16,7 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           '/auth/refreshToken',
         );
         setAuthenticated(!!tokenResponse.data.token);
-        // setToken(tokenResponse.data.token);
+        setToken(tokenResponse.data.token);
       } catch (error) {
         console.error(error);
       }

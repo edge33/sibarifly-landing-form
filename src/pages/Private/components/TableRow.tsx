@@ -1,8 +1,11 @@
 import { EventData } from '../../../types';
 
-type TableRowProps = EventData;
+type TableRowProps = EventData & {
+  editEvent: (id: number) => void;
+};
 
 const TableRow = ({
+  id,
   pilotInCommand,
   aircraftRegistration,
   aircraftType,
@@ -10,9 +13,17 @@ const TableRow = ({
   dateTime,
   departure,
   destination,
+  editEvent,
 }: TableRowProps) => {
   return (
-    <tr className="border-b dark:border-gray-700">
+    <tr
+      className="border-b dark:border-gray-700 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-200"
+      onClick={() => {
+        if (id !== undefined) {
+          editEvent(id);
+        }
+      }}
+    >
       <th
         scope="row"
         className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"

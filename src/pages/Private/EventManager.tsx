@@ -6,19 +6,25 @@ import useHttp from '../../hooks/useHttp';
 import { EventData } from '../../types';
 import TableRow from './components/TableRow';
 import TableHeader from './components/TableHader';
+import { useNavigate } from 'react-router-dom';
+
 const eventsHandler = () => instance.get('/events', { _retry: true });
 
 const EventManager = () => {
+  const navigate = useNavigate();
   const { data, trigger } = useHttp<null, EventData[]>(eventsHandler);
-
   useEffect(() => {
     trigger(null);
   }, [trigger]);
 
+  const editEvent = (id: number) => {
+    navigate(`/events/${id}`);
+  };
+
   return (
     <>
-      <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-        <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
+      <section>
+        <div className="">
           {/* Start coding here */}
           <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
             {/* <TableControls /> */}
@@ -26,7 +32,9 @@ const EventManager = () => {
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <TableHeader />
                 <tbody>
-                  {data?.map(event => <TableRow key={event.id} {...event} />)}
+                  {data?.map(event => (
+                    <TableRow key={event.id} {...event} editEvent={editEvent} />
+                  ))}
                 </tbody>
               </table>
             </div>
