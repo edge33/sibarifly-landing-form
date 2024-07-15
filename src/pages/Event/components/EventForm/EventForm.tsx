@@ -13,8 +13,6 @@ type LandingFormProps = {
 const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
   const editMode = initialData?.eventId !== undefined;
 
-  console.log('open in editmode:', editMode);
-
   const {
     register,
     handleSubmit,

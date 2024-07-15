@@ -46,7 +46,7 @@ const EventSummary = ({
 
     if (eventType === STOP) {
       events.push({
-        dateTime: arrivalDateTime,
+        dateTime: new Date(arrivalDateTime).toUTCString(),
         eventType: 'ARRIVAL',
         aircraftType,
         aircraftRegistration,
@@ -60,7 +60,7 @@ const EventSummary = ({
         emailAddress,
       });
       events.push({
-        dateTime: departureDateTime,
+        dateTime: new Date(departureDateTime).toUTCString(),
         eventType: 'DEPARTURE',
         aircraftType,
         aircraftRegistration,
@@ -75,7 +75,7 @@ const EventSummary = ({
       });
     } else {
       events.push({
-        dateTime: arrivalDateTime,
+        dateTime: new Date(arrivalDateTime).toUTCString(),
         eventType,
         aircraftType,
         aircraftRegistration,
