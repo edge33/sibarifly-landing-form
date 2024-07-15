@@ -7,6 +7,7 @@ export const GA = 'GA';
 export const ULM = 'ULM';
 
 export type EventData = {
+  id?: number;
   dateTime: string;
   eventType: EventType;
   aircraftType: typeof GA | typeof ULM;
@@ -24,6 +25,7 @@ export type EventData = {
 };
 
 export type EventFormData = {
+  eventId?: number;
   arrivalDateTime: string;
   departureDateTime: string;
   eventType: EventType;

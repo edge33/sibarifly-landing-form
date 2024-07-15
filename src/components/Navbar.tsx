@@ -93,7 +93,7 @@ const Navbar = () => {
             )}
             {authenticated && (
               <li>
-                <CustomNavLink to="/manage">Gestione</CustomNavLink>
+                <CustomNavLink to="/manage">Admin</CustomNavLink>
               </li>
             )}
             {authenticated && (

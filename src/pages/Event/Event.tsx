@@ -1,10 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { EventFormData } from '../../types';
-import Summary from './components/Summary';
+import { EventData, EventFormData } from '../../types';
+import EventSummary from './components/EventSummary';
 import EventForm from './components/EventForm/EventForm';
+import instance from '../../axios/axiosInstance';
+import useHttp from '../../hooks/useHttp';
+import { useParams } from 'react-router-dom';
+import mapEventDataToFormData from '../../utils/mapEventDataToFormData';
+
+const eventsHandler = (eventId: string) =>
+  instance.get(`/events/${eventId}`, { _retry: true });
 
 function Event() {
+  const params = useParams();
+  const eventId = params.eventId;
+
+  const { data, trigger } = useHttp<string, EventData>(eventsHandler);
+
+  useEffect(() => {
+    if (data) {
+      setLandingData(mapEventDataToFormData(data));
+      setViewSummary(true);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    (async () => {
+      if (eventId) {
+        await trigger(eventId);
+      }
+    })();
+  }, [eventId, trigger]);
+
   const [viewSummary, setViewSummary] = useState(false);
   const [landingData, setLandingData] = useState<EventFormData>();
 
@@ -23,9 +50,9 @@ function Event() {
   };
 
   return (
-    <>
+    <div>
       {landingData && viewSummary ? (
-        <Summary
+        <EventSummary
           landingData={landingData}
           onEditButtonClicked={onEditButtonClicked}
           onResetButtonClicked={onResetButtonClicked}
@@ -36,7 +63,7 @@ function Event() {
           initialData={landingData}
         />
       )}
-    </>
+    </div>
   );
 }
 
