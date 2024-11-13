@@ -5,18 +5,19 @@ const mandatoryField = 'This field is mandatory';
 
 const requiredString = z.string().trim().min(1, { message: mandatoryField });
 
-const presentDateError = 'Date cannot be in the future';
+// const presentDateError = 'Date cannot be in the future';
 
 export const EventFormSchema: ZodType = z
   .object({
-    arrivalDateTime: z.coerce.string({ required_error: mandatoryField }).refine(
-      data_ => {
-        return new Date(data_) <= new Date();
-      },
-      {
-        message: presentDateError,
-      },
-    ),
+    arrivalDateTime: z.coerce.string({ required_error: mandatoryField }),
+    // .refine(
+    //   data_ => {
+    //     return new Date(data_) <= new Date();
+    //   },
+    //   {
+    //     message: presentDateError,
+    //   },
+    // ),
     departureDateTime: z.string(),
 
     eventType: z.union([
