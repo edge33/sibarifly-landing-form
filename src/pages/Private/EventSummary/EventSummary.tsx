@@ -1,18 +1,16 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import instance from '../../../axios/axiosInstance';
-import Spinner from '../../../components/Spinner';
-import { EventData, EventFormData } from '../../../types';
-import { useEffect, useState } from 'react';
-import useHttp from '../../../hooks/useHttp';
-import mapEventDataToFormData from '../../../utils/mapEventDataToFormData';
 import Summary from '../../../components/EventSummary/Summary';
-
-type SummaryProps = {};
+import Spinner from '../../../components/Spinner';
+import useHttp from '../../../hooks/useHttp';
+import { EventData, EventFormData } from '../../../types';
+import mapEventDataToFormData from '../../../utils/mapEventDataToFormData';
 
 const eventsHandler = (eventId: string) =>
   instance.get(`/events/${eventId}`, { _retry: true });
 
-const EventSummary = ({}: SummaryProps) => {
+const EventSummary = () => {
   const { data, trigger, pending } = useHttp<string, EventData>(eventsHandler);
   const [eventData, setEventData] = useState<EventFormData>();
   const params = useParams();
