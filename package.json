@@ -36,14 +36,8 @@
     "typescript": "^7.0.2",
     "vite": "^8.3.5"
   },
-  "packageManager": "pnpm@10.5.1+sha512.c424c076bd25c1a5b188c37bb1ca56cc1e136fbf530d98bcb3289982a08fd25527b8c9c4ec113be5e3393c39af04521dd647bcf1d0801eaf8ac6a7b14da313af",
+  "packageManager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61",
   "engines": {
-    "node": ">=22.12.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "rollup@>=4.0.0 <4.59.0": "^4.59.0",
-      "yaml@>=2.0.0 <2.8.3": "^2.8.3"
-    }
+    "node": "24.x"
   }
 }

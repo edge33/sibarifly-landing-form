@@ -4,8 +4,8 @@ React 19 + TypeScript application built with Vite 8 and React Compiler.
 
 ## Development
 
-Use Node.js 24 (as in CI; minimum 22.12) and the pnpm version pinned in
-`package.json`.
+Use Node.js 24 (pinned in `.nvmrc` and used by CI) and pnpm 12.15.0
+(pinned in `package.json`).
 
 ```sh
 pnpm install --frozen-lockfile
@@ -52,6 +52,7 @@ Tailwind CSS 4 uses `@tailwindcss/vite`. The stylesheet explicitly loads the
 existing JavaScript theme and Flowbite sources, with class-based dark mode.
 Tailwind 4 requires Safari 16.4+, Chrome 111+, or Firefox 128+.
 
-The pnpm overrides keep transitive Rollup 4 and YAML 2 dependencies on patched
-versions for GHSA-mw96-cpmx-2vgc and GHSA-48c2-rrv3-qjmp. Revisit these overrides
-when upstream dependencies no longer resolve vulnerable versions.
+The overrides in `pnpm-workspace.yaml` keep transitive Rollup 4 and YAML 2
+dependencies on patched versions for GHSA-mw96-cpmx-2vgc and
+GHSA-48c2-rrv3-qjmp. Revisit these overrides when upstream dependencies no
+longer resolve vulnerable versions.
