@@ -1,9 +1,10 @@
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import instance, { setToken } from '../axios/axiosInstance';
 import AuthContext from './AuthContext';
 
 type AuthContextProviderProps = {
-  children: JSX.Element;
+  children: ReactNode;
 };
 
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {

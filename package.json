@@ -14,25 +14,30 @@
     "check": "biome check . --error-on-warnings"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.10.0",
-    "axios": "^1.9.0",
-    "flowbite": "^2.5.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-hook-form": "^7.56.4",
-    "react-router-dom": "^6.30.1",
-    "zod": "^3.25.28"
+    "@hookform/resolvers": "^6.0.0",
+    "axios": "^1.20.0",
+    "flowbite": "^4.0.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.90.0",
+    "react-router-dom": "^7.18.4",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@babel/core": "^8.0.7",
     "@biomejs/biome": "2.6.2",
-    "@types/react": "^18.3.22",
-    "@types/react-dom": "^18.3.7",
-    "@vitejs/plugin-react-swc": "^3.10.0",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3",
-    "vite": "^5.4.19"
+    "@rolldown/plugin-babel": "^0.2.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
   },
-  "packageManager": "pnpm@10.5.1+sha512.c424c076bd25c1a5b188c37bb1ca56cc1e136fbf530d98bcb3289982a08fd25527b8c9c4ec113be5e3393c39af04521dd647bcf1d0801eaf8ac6a7b14da313af"
+  "packageManager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61",
+  "engines": {
+    "node": "24.x"
+  }
 }

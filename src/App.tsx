@@ -1,7 +1,7 @@
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
-  useNavigate,
 } from 'react-router-dom';
 import { useAuthContext } from './authContext/AuthContext';
 import Layout from './components/Layout';
@@ -13,11 +13,9 @@ import EventSummary from './pages/Private/EventSummary/EventSummary';
 
 const AuthenticatedRoute = ({ children }: { children: React.ReactElement }) => {
   const { authenticated } = useAuthContext();
-  const navigate = useNavigate();
 
   if (!authenticated) {
-    navigate('/auth', { replace: true });
-    return null;
+    return <Navigate to="/auth" replace />;
   }
 
   return children;

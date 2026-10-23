@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { ARRIVAL, DEPARTURE, EventFormData, GA, STOP } from '../../../../types';
 import anHourFromNow from '../../../../utils/anHourFromNow';
 import getCurrentDateTime from '../../../../utils/getCurrentDateTime';
-import { EventFormSchema } from './EventFormSchema';
+import { EventFormInput, EventFormSchema } from './EventFormSchema';
 
 type LandingFormProps = {
   onLandingDataFiled: (data: EventFormData) => void;
@@ -18,8 +18,8 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
-  } = useForm<EventFormData>({
+    control,
+  } = useForm<EventFormInput, unknown, EventFormData>({
     defaultValues: initialData
       ? initialData
       : {
@@ -32,7 +32,7 @@ const LandingForm = ({ onLandingDataFiled, initialData }: LandingFormProps) => {
     resolver: zodResolver(EventFormSchema),
   });
 
-  const eventType = getValues().eventType;
+  const eventType = useWatch({ control, name: 'eventType' });
 
   const onSubmit = (data: EventFormData) => {
     const destination = data.destination;
