@@ -6,8 +6,8 @@ import {
 import { useAuthContext } from './authContext/AuthContext';
 import Layout from './components/Layout';
 import Login from './pages/Auth/Login';
-import Event from './pages/Event/Event';
 import ErrorPage from './pages/ErrorPage';
+import Event from './pages/Event/Event';
 import EventManager from './pages/Private/EventManager';
 import EventSummary from './pages/Private/EventSummary/EventSummary';
 

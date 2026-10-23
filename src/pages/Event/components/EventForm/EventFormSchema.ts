@@ -1,4 +1,4 @@
-import { z, ZodType } from 'zod';
+import { ZodType, z } from 'zod';
 import { ARRIVAL, DEPARTURE, GA, STOP, ULM } from '../../../../types';
 
 const mandatoryField = 'This field is mandatory';

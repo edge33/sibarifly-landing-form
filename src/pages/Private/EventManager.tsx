@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import instance from '../../axios/axiosInstance';
 import useHttp from '../../hooks/useHttp';
 // import TableControls from './components/TableControls';
 // import TableFooter from './components/TableFooter';
 import { EventData } from '../../types';
-import TableRow from './components/TableRow';
 import TableHeader from './components/TableHader';
-import { useNavigate } from 'react-router-dom';
+import TableRow from './components/TableRow';
 
 const eventsHandler = () => instance.get('/events', { _retry: true });
 

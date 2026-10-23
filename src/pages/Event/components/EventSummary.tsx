@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import instance from '../../../axios/axiosInstance';
 import Summary from '../../../components/EventSummary/Summary';
 import Spinner from '../../../components/Spinner';
 import { EventData, EventFormData, STOP } from '../../../types';
-import { useState } from 'react';
 
 type SummaryProps = {
   landingData: EventFormData;

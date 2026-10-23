@@ -1,6 +1,6 @@
 import { EventFormData, STOP } from '../../types';
 
-export const EVENT_MAP = {
+const EVENT_MAP = {
   ARRIVAL: 'Arrival',
   DEPARTURE: 'Departure',
   STOP: 'Fuel stop',

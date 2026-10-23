@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { EventFormSchema } from './EventFormSchema';
-import { EventFormData, GA, ARRIVAL, DEPARTURE, STOP } from '../../../../types';
-import getCurrentDateTime from '../../../../utils/getCurrentDateTime';
+import { ARRIVAL, DEPARTURE, EventFormData, GA, STOP } from '../../../../types';
 import anHourFromNow from '../../../../utils/anHourFromNow';
+import getCurrentDateTime from '../../../../utils/getCurrentDateTime';
+import { EventFormSchema } from './EventFormSchema';
 
 type LandingFormProps = {
   onLandingDataFiled: (data: EventFormData) => void;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import AuthContext from './AuthContext';
 import instance, { setToken } from '../axios/axiosInstance';
+import AuthContext from './AuthContext';
 
 type AuthContextProviderProps = {
   children: JSX.Element;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { EventFormData } from '../../types';
-import EventSummary from './components/EventSummary';
 import EventForm from './components/EventForm/EventForm';
+import EventSummary from './components/EventSummary';
 
 function Event() {
   const [viewSummary, setViewSummary] = useState(false);
