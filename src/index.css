@@ -4,16 +4,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Preserve the border default used before the Tailwind 4 migration. */
-@layer base {
-  *,
-  ::before,
-  ::after,
-  ::backdrop {
-    border-color: var(--color-gray-200, currentColor);
-  }
-}
-
 body,
 html,
 #root {

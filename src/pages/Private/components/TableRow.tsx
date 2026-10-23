@@ -17,7 +17,7 @@ const TableRow = ({
 }: TableRowProps) => {
   return (
     <tr
-      className="border-b dark:border-gray-700 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-200"
+      className="border-b border-gray-200 dark:border-gray-700 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-200"
       onClick={() => {
         if (id !== undefined) {
           editEvent(id);
