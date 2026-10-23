@@ -9,7 +9,8 @@ const sizeMap = {
   xlarge: 'w-16 h-16',
 };
 
-const Spinner = ({ size = 'medium' }: SpinnerProps) => {
+const Spinner = (props: SpinnerProps) => {
+  const size = props.size ?? 'medium';
   return (
     <div role="status">
       <svg

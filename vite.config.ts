@@ -1,9 +1,19 @@
-import react from '@vitejs/plugin-react-swc';
-import { defineConfig } from 'vite';
+import babel from '@rolldown/plugin-babel';
+import tailwindcss from '@tailwindcss/vite';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+import { defineConfig } from 'vitest/config';
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
+    tailwindcss(),
+  ],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+  },
   server: {
     port: 3000,
     proxy: {

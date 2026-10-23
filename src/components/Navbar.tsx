@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink, NavLinkProps, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../authContext/AuthContext';
 
@@ -12,7 +12,7 @@ const CustomNavLink = ({ to, children, ...props }: NavLinkProps) => {
       {...props}
       to={to}
       className={({ isActive }) =>
-        `block py-2 px-3 text-gray-900 rounded ${!isActive && 'hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'} md:border-0 md:p-0 dark:text-white  ${isActive && activeClass}`
+        `block py-2 px-3 text-gray-900 rounded-sm ${!isActive && 'hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'} md:border-0 md:p-0 dark:text-white  ${isActive && activeClass}`
       }
       aria-current="page"
     >
@@ -28,22 +28,20 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsMenuVisible(!isMenuVisible);
 
-  const darkModeButton = useRef<SVGSVGElement>(null);
-  const lightModeButton = useRef<SVGSVGElement>(null);
-
-  const darkMode = document.documentElement.classList.contains('dark');
+  const [darkMode, setDarkMode] = useState(() =>
+    document.documentElement.classList.contains('dark'),
+  );
 
   const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
-    darkModeButton.current?.classList.toggle('hidden');
-    lightModeButton.current?.classList.toggle('hidden');
-    const darkMode = document.documentElement.classList.contains('dark');
-    localStorage.setItem('color-theme', darkMode ? 'dark' : 'light');
+    const nextDarkMode = !darkMode;
+    setDarkMode(nextDarkMode);
+    document.documentElement.classList.toggle('dark', nextDarkMode);
+    localStorage.setItem('color-theme', nextDarkMode ? 'dark' : 'light');
   };
 
   return (
     <nav className="print:hidden">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           to="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
@@ -56,9 +54,9 @@ const Navbar = () => {
         <button
           data-collapse-toggle="navbar-default"
           type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-hidden focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           aria-controls="navbar-default"
-          aria-expanded="false"
+          aria-expanded={isMenuVisible}
           onClick={toggleMenu}
         >
           <span className="sr-only">Open main menu</span>
@@ -113,13 +111,13 @@ const Navbar = () => {
             )}
           </ul>
           <button
+            aria-label="Toggle color theme"
             id="theme-toggle"
             type="button"
-            className="self-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 md:ml-4 mt-4 md:mt-0"
+            className="self-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-hidden focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 md:ml-4 mt-4 md:mt-0"
             onClick={toggleTheme}
           >
             <svg
-              ref={darkModeButton}
               id="theme-toggle-dark-icon"
               className={`${darkMode && 'hidden'} w-5 h-5`}
               fill="currentColor"
@@ -129,7 +127,6 @@ const Navbar = () => {
               <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
             </svg>
             <svg
-              ref={lightModeButton}
               id="theme-toggle-light-icon"
               className={`${!darkMode && 'hidden'} w-5 h-5`}
               fill="currentColor"

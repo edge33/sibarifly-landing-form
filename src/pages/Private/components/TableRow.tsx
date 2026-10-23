@@ -40,7 +40,7 @@ const TableRow = ({
         <button
           id="apple-imac-27-dropdown-button"
           data-dropdown-toggle="apple-imac-27-dropdown"
-          className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+          className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-hidden dark:text-gray-400 dark:hover:text-gray-100"
           type="button"
         >
           <svg
@@ -55,7 +55,7 @@ const TableRow = ({
         </button>
         <div
           id="apple-imac-27-dropdown"
-          className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+          className="hidden z-10 w-44 bg-white rounded-sm divide-y divide-gray-100 shadow-sm dark:bg-gray-700 dark:divide-gray-600"
         >
           <ul
             className="py-1 text-sm text-gray-700 dark:text-gray-200"
