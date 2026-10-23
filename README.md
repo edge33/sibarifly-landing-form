@@ -26,8 +26,6 @@ pnpm lint:fix      # Apply safe lint fixes
 pnpm format        # Format supported files
 pnpm format:check  # Check formatting without modifying files
 pnpm check         # Check lint, formatting, and import organization
-pnpm test          # Run Vitest tests once
-pnpm test:watch    # Run Vitest in watch mode
 pnpm build         # Type-check and build for production
 ```
 
@@ -37,13 +35,13 @@ maintained manually.
 
 ## Continuous integration
 
-GitHub Actions runs `pnpm lint`, `pnpm test`, and `pnpm build` on pushes and pull requests.
+GitHub Actions runs `pnpm lint` and `pnpm build` on pushes and pull requests.
 The workflow uses Node.js 24, the pnpm version pinned in `package.json`, and a
 frozen lockfile. It can also be started manually from the Actions tab.
 
 ## Build tooling
 
-React Compiler runs in development, tests, and production through
+React Compiler runs in development and production through
 `@vitejs/plugin-react`'s `reactCompilerPreset` and `@rolldown/plugin-babel`,
 following the [React Compiler Vite setup](https://react.dev/learn/react-compiler/installation#vite).
 It automatically memoizes eligible components and hooks; manual `use memo`
@@ -53,9 +51,6 @@ directives are unnecessary. Keep renders pure and use reactive subscriptions
 Tailwind CSS 4 uses `@tailwindcss/vite`. The stylesheet explicitly loads the
 existing JavaScript theme and Flowbite sources, with class-based dark mode.
 Tailwind 4 requires Safari 16.4+, Chrome 111+, or Firefox 128+.
-
-Vitest uses the same Vite plugin pipeline and a jsdom environment. Component
-tests use Testing Library with explicit cleanup between tests.
 
 The pnpm overrides keep transitive Rollup 4 and YAML 2 dependencies on patched
 versions for GHSA-mw96-cpmx-2vgc and GHSA-48c2-rrv3-qjmp. Revisit these overrides

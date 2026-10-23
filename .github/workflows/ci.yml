@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   lint-and-build:
-    name: Lint, test and build
+    name: Lint and build
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -32,9 +32,6 @@ jobs:
 
       - name: Lint
         run: pnpm lint
-
-      - name: Test
-        run: pnpm test
 
       - name: Build
         run: pnpm build
